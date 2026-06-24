@@ -32,7 +32,7 @@ void esgos_restart()
 {
     ESP.restart();
 }
-esgos_update_result esgos_core_update(char *file)
+esgos_update_result esgos_core_update(const char *file)
 {
     if (!esgos_fs_is_exists(file))
     {
@@ -42,7 +42,7 @@ esgos_update_result esgos_core_update(char *file)
     {
         return esgos_update_not_file;
     }
-    File updateSource = SD.open("/update.bin");
+    File updateSource = SD.open(file,"r");
     size_t updateSize = updateSource.size();
 
     esgos_update_result result = esgos_update_unknown;
@@ -83,4 +83,14 @@ esgos_update_result esgos_core_update(char *file)
 FINISH:
     updateSource.close();
     return result;
+}
+
+esgos_update_result esgos_core_update_default()
+{
+    esgos_core_update("/updates/firmware.bin");
+}
+
+void esgos_schedule_rom_update()
+{
+    SD.open("/boot/f_rom_update_scheduled","wr").close();
 }

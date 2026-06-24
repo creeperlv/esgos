@@ -37,7 +37,8 @@ typedef enum esgos_update_result
     esgos_update_not_enough_space,
     esgos_update_partial_written,
 } esgos_update_result;
-esgos_update_result esgos_core_update(char *file);
+esgos_update_result esgos_core_update(const char *file);
+esgos_update_result esgos_core_update_default();
 void esgos_schedule_rom_update();
 void esgos_apply_rom_update();
 void esgos_poweroff();

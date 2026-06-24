@@ -15,6 +15,7 @@
 #include "esgos_engine.h"
 #include "esgos_system_apps.h"
 #include "esgos_app_host.h"
+#include "esgos_system_funcs.h"
 void *current_app;
 void *home_app;
 void *file_manager_app;
@@ -126,6 +127,7 @@ void setup()
     show_logln("Engine: Home App context inited.");
     esgos_engine_setup_system_app_api(home_app);
     esgos_dt_bind_all((duk_context *)home_app);
+    esgos_dt_bind_system((duk_context *)home_app);
     show_logln("Engine: Home App calls inited.");
     {
         if (!esgos_fs_is_exists(APP_PATH_HOME))
