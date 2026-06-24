@@ -32,6 +32,7 @@ void esgos_engine_setup_system_app_api(void *engine_context);
  * @param func the function to call, must be a valid emca script statement like "func()"
  */
 void esgos_call_func(void *engine_context, char *func);
+void esgos_call_handle_file(void *engine_context, char *file_path);
 void esgos_call_init(void *engine_context);
 void esgos_call_loop(void *engine_context);
 #endif

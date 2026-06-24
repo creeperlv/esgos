@@ -54,6 +54,7 @@ duk_ret_t esgos_dt_fs_read(duk_context *ctx);
 duk_ret_t esgos_dt_fs_read_char(duk_context *ctx);
 
 duk_ret_t esgos_dt_core_load_library(duk_context *ctx);
+duk_ret_t esgos_dt_core_log(duk_context *ctx);
 duk_ret_t esgos_dt_core_delay(duk_context *ctx);
 duk_ret_t esgos_dt_core_write(duk_context *ctx);
 duk_ret_t esgos_dt_core_write_line(duk_context *ctx);

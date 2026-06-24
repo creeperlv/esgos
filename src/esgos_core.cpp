@@ -19,6 +19,11 @@ bool esgos_is_show_boot_log()
     return esgos_fs_is_exists("/boot/f_show_boot_log");
 }
 
+bool esgos_is_rom_update_scheduled()
+{
+    return esgos_fs_is_exists("/boot/f_rom_update_scheduled") && esgos_fs_is_exists("/updates/rom.tar.gz");
+}
+
 void esgos_poweroff()
 {
     M5.Power.powerOff();

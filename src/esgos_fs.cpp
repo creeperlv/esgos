@@ -17,7 +17,7 @@ bool esgos_fs_init()
     return true;
 }
 
-void *esgos_fs_open(const char *fp, char *mode)
+void *esgos_fs_open(const char *fp,const char *mode)
 {
     fs::File file = SD.open(fp, mode);
     if (!file)

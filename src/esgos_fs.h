@@ -7,7 +7,7 @@
 #include <M5Unified.h>
 
 bool esgos_fs_init();
-void *esgos_fs_open(const char *fp, char *mode);
+void *esgos_fs_open(const char *fp,const char *mode);
 size_t esgos_fs_size(void *file_handle);
 size_t esgos_fs_seek(void *file_handle, size_t pos);
 bool esgos_fs_is_exists(const char *fp);

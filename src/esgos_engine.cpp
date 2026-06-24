@@ -114,6 +114,14 @@ void esgos_call_func(void *engine_context, char *func)
     duk_eval_string_noresult((duk_context *)engine_context, func);
 }
 
+void esgos_call_handle_file(void *engine_context, char *file_path)
+{
+    duk_context *ctx = (duk_context *)engine_context;
+    duk_get_global_string(ctx, "HandleFile");
+    duk_push_string(ctx, file_path);
+    duk_call(ctx, 1);
+}
+
 void esgos_call_init(void *engine_context)
 {
     duk_eval_string_noresult((duk_context *)engine_context, "init();");

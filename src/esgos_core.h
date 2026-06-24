@@ -26,6 +26,7 @@ void *esgos_obtain_null();
 const char *esgos_version();
 const char *esgos_release_channel();
 bool esgos_is_show_boot_log();
+bool esgos_is_rom_update_scheduled();
 typedef enum esgos_update_result
 {
     esgos_update_success,
@@ -37,6 +38,8 @@ typedef enum esgos_update_result
     esgos_update_partial_written,
 } esgos_update_result;
 esgos_update_result esgos_core_update(char *file);
+void esgos_schedule_rom_update();
+void esgos_apply_rom_update();
 void esgos_poweroff();
 void esgos_restart();
 #endif
