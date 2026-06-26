@@ -5,6 +5,11 @@ static duk_function_list_entry sys_funcs[] = {
     {"Restart", esgos_dt_system_restart, 0},
     {"StartRomUpdate", esgos_dt_system_rom_update, 0},
     {"FirmwareUpdate", esgos_dt_system_firmware_update, 0},
+    {"ToSettings", esgos_dt_system_to_settings, 0},
+    {"LaunchSysApp", esgos_dt_system_launch_sys_app, 1},
+    {"StartMSC", esgos_dt_system_enable_msc, 0},
+    {"StopMSC", esgos_dt_system_disable_msc, 0},
+    {"IsMSCStarted", esgos_dt_system_check_msc, 0},
     {NULL, NULL, 0}};
 duk_ret_t esgos_dt_system_restart(duk_context *ctx)
 {
@@ -24,6 +29,34 @@ duk_ret_t esgos_dt_system_firmware_update(duk_context *ctx)
 duk_ret_t esgos_dt_system_rom_update(duk_context *ctx)
 {
     return 0;
+}
+duk_ret_t esgos_dt_system_enable_msc(duk_context *ctx)
+{
+    esgos_system_usb_msc_start();
+    return 0;
+}
+duk_ret_t esgos_dt_system_disable_msc(duk_context *ctx)
+{
+    esgos_system_usb_msc_end();
+    return 0;
+}
+duk_ret_t esgos_dt_system_check_msc(duk_context *ctx)
+{
+    duk_push_boolean(ctx, esgos_system_usb_msc_is_started());
+    return 1;
+}
+static handler to_settings = nullptr;
+duk_ret_t esgos_dt_system_to_settings(duk_context *ctx)
+{
+    if (to_settings != nullptr)
+    {
+        to_settings();
+    }
+    return 0;
+}
+void esgos_dt_set_to_settings(handler handler)
+{
+    to_settings = handler;
 }
 void esgos_dt_bind_system(duk_context *ctx)
 {

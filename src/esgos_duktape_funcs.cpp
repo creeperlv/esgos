@@ -7,20 +7,27 @@ static duk_function_list_entry ui_funcs[] = {
     {"GetScreenH", esgos_dt_ui_get_screen_h, 0},
     {"GetStatusBarHeight", esgos_dt_ui_get_status_bar_height, 0},
     {"GetFont16", esgos_dt_ui_get_font16, 0},
+    {"GetFont24", esgos_dt_ui_get_font24, 0},
     {"GetFont40", esgos_dt_ui_get_font40, 0},
+    {"ClearScreen", esgos_dt_ui_full_screen_clear, 0},
     {"FillRect", esgos_dt_ui_fill_rect, 5},
     {"DrawBox", esgos_dt_ui_draw_box, 5},
     {"GetWhite", esgos_dt_ui_get_white, 0},
     {"GetBlack", esgos_dt_ui_get_black, 0},
     {"SetTextColor", esgos_dt_ui_set_text_color, 1},
+    {"SetTextCursor", esgos_dt_ui_set_text_cursor, 2},
+    {"SetTextFont", esgos_dt_ui_set_text_font, 1},
     {"DrawPngFile", esgos_dt_ui_draw_image_png_file, 7},
     {NULL, NULL, 0}};
 
 static duk_function_list_entry core_funcs[] = {
     {"Log", esgos_dt_core_log, 1},
+    {"Delay", esgos_dt_core_delay, 1},
     {"Write", esgos_dt_core_write, 1},
     {"WriteLine", esgos_dt_core_write_line, 1},
-    {"LoadLibrary", esgos_dt_core_load_library, 1},
+    {"LaunchApp", esgos_dt_core_launch_app, 1},
+    {"GetVersion", esgos_dt_core_get_version, 0},
+    {"GetRelease", esgos_dt_core_get_release, 0},
     {NULL, NULL, 0}};
 
 static duk_function_list_entry touch_funcs[] = {
@@ -56,6 +63,16 @@ duk_ret_t esgos_dt_core_write_line(duk_context *ctx)
 {
     esgos_ui_println(duk_to_string(ctx, 0));
     return 0;
+}
+duk_ret_t esgos_dt_core_get_version(duk_context *ctx)
+{
+    duk_push_string(ctx, esgos_version());
+    return 1;
+}
+duk_ret_t esgos_dt_core_get_release(duk_context *ctx)
+{
+    duk_push_string(ctx, esgos_release_channel());
+    return 1;
 }
 void esgos_dt_bind_ui(duk_context *ctx)
 {
@@ -147,6 +164,12 @@ duk_ret_t esgos_dt_ui_fill_rect(duk_context *ctx)
     return 0;
 }
 
+duk_ret_t esgos_dt_ui_full_screen_clear(duk_context *ctx)
+{
+    esgos_ui_clear_screen();
+    return 0;
+}
+
 duk_ret_t esgos_dt_ui_set_text_color(duk_context *ctx)
 {
     void *color = duk_get_pointer(ctx, 0);
@@ -159,6 +182,13 @@ duk_ret_t esgos_dt_ui_set_text_cursor(duk_context *ctx)
     int y = (int)duk_get_number(ctx, 1);
     int x = (int)duk_get_number(ctx, 0);
     esgos_ui_set_cursor(x, y);
+    return 0;
+}
+
+duk_ret_t esgos_dt_ui_set_text_font(duk_context *ctx)
+{
+    void* font_ptr=duk_get_pointer(ctx, 0);
+    esgos_ui_set_font(font_ptr);
     return 0;
 }
 
@@ -188,10 +218,10 @@ duk_ret_t esgos_dt_ui_draw_image_png_file(duk_context *ctx)
 {
 
     const char *content = duk_get_string(ctx, 0);
-    int x = (int)duk_get_number(ctx, 1);
-    int y = (int)duk_get_number(ctx, 2);
-    int w = (int)duk_get_number(ctx, 3);
-    int h = (int)duk_get_number(ctx, 4);
+    int x = (int32_t)duk_get_number(ctx, 1);
+    int y = (int32_t)duk_get_number(ctx, 2);
+    int w = (int32_t)duk_get_number(ctx, 3);
+    int h = (int32_t)duk_get_number(ctx, 4);
     double sx = duk_get_number(ctx, 5);
     double sy = duk_get_number(ctx, 6);
     esgos_ui_draw_png_file(content, x, y, w, h, sx, sy);
@@ -213,6 +243,12 @@ duk_ret_t esgos_dt_ui_get_screen_h(duk_context *ctx)
 duk_ret_t esgos_dt_ui_get_font16(duk_context *ctx)
 {
     duk_push_pointer(ctx, esgos_ui_get_font16());
+    return 1;
+}
+
+duk_ret_t esgos_dt_ui_get_font24(duk_context *ctx)
+{
+    duk_push_pointer(ctx, esgos_ui_get_font24());
     return 1;
 }
 

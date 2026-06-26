@@ -27,18 +27,37 @@ static duk_ret_t duk_esgos_open_app(duk_context *ctx)
 {
     const char *main_app_path = duk_to_string(ctx, 0);
     esgos_launch_app_func(main_app_path);
+    return 0;
 }
+static void fatal_handler(void *udata, const char *msg)
+{
+    show_logln("FALAL ERROR");
+    if (msg)
+        show_logln(msg);
+    else
+        show_logln("no message");
+    while (1)
+        delay(1000);
+}
+
 void *esgos_create_engine_context()
 {
-    duk_context *ctx = duk_create_heap_default();
+    duk_context *
+        // ctx = duk_create_heap_default();
 
-    duk_push_c_function(ctx, gfx_print, 1);
-    duk_put_global_string(ctx, "print");
+        ctx = duk_create_heap(NULL, NULL, NULL, NULL, fatal_handler);
+    // duk_push_c_function(ctx, gfx_print, 1);
+    // duk_put_global_string(ctx, "print");
 
-    duk_push_c_function(ctx, duk_esgos_engine_app_stop, 0);
-    duk_put_global_string(ctx, "exit");
-    esgos_dt_bind_all(ctx);
+    // duk_push_c_function(ctx, duk_esgos_engine_app_stop, 0);
+    // duk_put_global_string(ctx, "exit");
+    // esgos_dt_bind_all(ctx);
     return ctx;
+}
+
+void esgos_destroy_engine_context(void *engine_context)
+{
+    duk_destroy_heap((duk_context *)engine_context);
 }
 
 void esgos_bind_to_home(void (*to_home)())
@@ -56,20 +75,22 @@ void esgos_bind_esgos_launch_app(esgos_launch_app func)
     esgos_launch_app_func = func;
 }
 
-void esgos_load_script(void *engine_context, char *script)
+void esgos_load_script(void *engine_context, const char *script)
 {
-    duk_eval_string((duk_context *)engine_context, script);
+    duk_peval_string((duk_context *)engine_context, script);
 }
 
-void esgos_load_script_no_result(void *engine_context, char *script)
+void esgos_load_script_no_result(void *engine_context, const char *script)
 {
-    duk_eval_string_noresult((duk_context *)engine_context, script);
+    duk_pcompile_string((duk_context *)engine_context, 0, script);
+    duk_call((duk_context *)engine_context, 0);
+    // duk_eval_string_noresult((duk_context *)engine_context, script);
 }
 
 void esgos_load_script_from_file(void *engine_context, const char *file_path)
 {
     char *script = esgos_fs_read_file_path_all_cstr(file_path);
-    esgos_load_script_no_result(engine_context, script);
+    esgos_load_script_no_result(engine_context, (const char *)script);
     free(script);
 }
 
@@ -109,7 +130,7 @@ void esgos_engine_setup_system_app_api(void *engine_context)
     duk_put_global_string(ctx, "to_home");
 }
 
-void esgos_call_func(void *engine_context, char *func)
+void esgos_call_func(void *engine_context, const char *func)
 {
     duk_eval_string_noresult((duk_context *)engine_context, func);
 }

@@ -87,7 +87,7 @@ FINISH:
 
 esgos_update_result esgos_core_update_default()
 {
-    esgos_core_update("/updates/firmware.bin");
+    return esgos_core_update("/updates/firmware.bin");
 }
 
 void esgos_schedule_rom_update()

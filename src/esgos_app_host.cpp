@@ -2,25 +2,17 @@
 #include <Arduino.h>
 #include <SPI.h>
 #include <SD.h>
+#include <string>
 
 void esgos_app_host_load_deps(void *engine_context, const char *app_dir)
 {
-    size_t app_dir_len = strlen(app_dir);
-    char *full_dep_file = (char *)malloc(app_dir_len + sizeof(esgos_dep_file_name));
-    strcpy(full_dep_file, app_dir);
-    const char *dep_file = esgos_dep_file_name;
-    for (size_t i = 0; i < sizeof(esgos_dep_file_name); i++)
-    {
-        full_dep_file[app_dir_len + i] = dep_file[0];
-    }
-    esgos_app_host_load_deps_with_depfn(engine_context, app_dir, dep_file);
+    std::string full_path = std::string(app_dir) + "/esgos.dep";
+    const char *full_dep_file = full_path.c_str();
+    esgos_app_host_load_deps_with_depfn(engine_context, app_dir, full_dep_file);
 }
 
 void esgos_app_host_load_deps_with_depfn(void *engine_context, const char *app_dir, const char *dep_file)
 {
-    show_logln("Loading Dependency");
-    show_logln(dep_file);
-    // delay(1000);
     auto fp = esgos_fs_open(dep_file, "r");
     while (1)
     {
@@ -35,4 +27,49 @@ void esgos_app_host_load_deps_with_depfn(void *engine_context, const char *app_d
         free(entry);
     }
     esgos_fs_close(fp);
+}
+
+void *esgos_app_host_start_app(const char *app_dir)
+{
+    void *ptr = esgos_create_engine_context();
+
+    // esgos_dt_bind_all((duk_context *)ptr);
+
+    esgos_app_host_load_deps(ptr, app_dir);
+    std::string full_path = std::string(app_dir) + "/app.js";
+    const char *app_path = full_path.c_str();
+    char *script = esgos_fs_read_file_path_all_cstr(app_path);
+    esgos_load_script_no_result(ptr, script);
+    free(script);
+    return ptr;
+}
+
+void *esgos_app_host_start_system_app(const char *app_dir)
+{
+    void *ptr = esgos_create_engine_context();
+
+    // esgos_engine_setup_system_app_api(ptr);
+    esgos_dt_bind_all((duk_context *)ptr);
+    esgos_dt_bind_system((duk_context *)ptr);
+    std::string full_path = std::string(app_dir) + "/app.js";
+    const char *app_path = full_path.c_str();
+    char *script = esgos_fs_read_file_path_all_cstr(app_path);
+    esgos_load_script_no_result(ptr, script);
+    free(script);
+    esgos_app_host_load_deps(ptr, app_dir);
+    return ptr;
+}
+
+duk_ret_t esgos_dt_core_launch_app(duk_context *ctx)
+{
+    const char *app_folder = duk_to_string(ctx, 0);
+    esgos_core_schedule_launch_app(app_folder, false);
+    return 0;
+}
+
+duk_ret_t esgos_dt_system_launch_sys_app(duk_context *ctx)
+{
+    const char *app_folder = duk_to_string(ctx, 0);
+    esgos_core_schedule_launch_app(app_folder, true);
+    return 0;
 }

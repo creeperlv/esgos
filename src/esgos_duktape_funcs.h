@@ -18,6 +18,7 @@ duk_ret_t esgos_dt_ui_draw_center_string(duk_context *ctx);
 duk_ret_t esgos_dt_ui_draw_center_string_font(duk_context *ctx);
 
 duk_ret_t esgos_dt_ui_fill_rect(duk_context *ctx);
+duk_ret_t esgos_dt_ui_full_screen_clear(duk_context *ctx);
 
 duk_ret_t esgos_dt_ui_set_text_color(duk_context *ctx);
 duk_ret_t esgos_dt_ui_set_text_cursor(duk_context *ctx);
@@ -55,9 +56,13 @@ duk_ret_t esgos_dt_fs_read_char(duk_context *ctx);
 
 duk_ret_t esgos_dt_core_load_library(duk_context *ctx);
 duk_ret_t esgos_dt_core_log(duk_context *ctx);
+duk_ret_t esgos_dt_core_launch_app(duk_context *ctx);
+duk_ret_t esgos_dt_core_launch_app_w_p(duk_context *ctx);
 duk_ret_t esgos_dt_core_delay(duk_context *ctx);
 duk_ret_t esgos_dt_core_write(duk_context *ctx);
 duk_ret_t esgos_dt_core_write_line(duk_context *ctx);
+duk_ret_t esgos_dt_core_get_version(duk_context *ctx);
+duk_ret_t esgos_dt_core_get_release(duk_context *ctx);
 
 void esgos_dt_bind_ui(duk_context *ctx);
 void esgos_dt_bind_touch(duk_context *ctx);

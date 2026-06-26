@@ -16,8 +16,8 @@ void esgos_bind_to_home(void (*to_home)());
 void esgos_bind_app_stop(esgos_engine_app_stop func);
 void esgos_bind_esgos_launch_app(esgos_launch_app func);
 
-void esgos_load_script(void *engine_context, char *script);
-void esgos_load_script_no_result(void *engine_context, char *script);
+void esgos_load_script(void *engine_context,const  char *script);
+void esgos_load_script_no_result(void *engine_context,const  char *script);
 void esgos_load_script_from_file(void *engine_context,const char *file_path);
 void esgos_load_script_fn(void *engine_context, char *script, char *fn);
 void esgos_load_bytecode(void *engine_context, void *data, size_t data_size);
@@ -31,7 +31,7 @@ void esgos_engine_setup_system_app_api(void *engine_context);
  * @brief call to a loaded script with no return value left on the stack.
  * @param func the function to call, must be a valid emca script statement like "func()"
  */
-void esgos_call_func(void *engine_context, char *func);
+void esgos_call_func(void *engine_context,const char *func);
 void esgos_call_handle_file(void *engine_context, char *file_path);
 void esgos_call_init(void *engine_context);
 void esgos_call_loop(void *engine_context);

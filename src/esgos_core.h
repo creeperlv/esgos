@@ -21,6 +21,8 @@ typedef struct esgos_config
     bool release_sys_app;
 
 } esgos_config;
+typedef void(*handler)();
+void esgos_core_schedule_launch_app(const char* app, bool is_system_app);
 void show_logln(const char *str);
 void *esgos_obtain_null();
 const char *esgos_version();

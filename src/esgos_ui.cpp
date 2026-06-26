@@ -37,6 +37,13 @@ int esgos_ui_get_screen_h()
 {
     return M5.Display.height();
 }
+void esgos_ui_clear_screen()
+{
+    int w = esgos_ui_get_screen_w();
+    int h = esgos_ui_get_screen_h();
+    esgos_ui_fill_rectangle(0, 0, w, h, esgos_ui_get_color_white());
+    ui_core_info->full_refresh_requested = true;
+}
 void esgos_ui_print(const char *str)
 {
     M5.Display.print(str);
@@ -122,6 +129,11 @@ void *esgos_ui_get_font24()
 void *esgos_ui_get_font40()
 {
     return (void *)&fonts::DejaVu40;
+}
+
+void esgos_ui_set_font(void *font)
+{
+    M5.Display.setFont(static_cast<lgfx::IFont *>(font));
 }
 
 void esgos_ui_set_font16()
