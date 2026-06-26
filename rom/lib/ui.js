@@ -8,7 +8,7 @@ function UIInit() {
 function __isHitAABB(x, y, w, h, px, py) {
     return px > x && px < (x + w) && py > y && py < (y + h);
 }
-function TextButton() {
+function TextButton(x, y, w, h, content, OnClick) {
     var btn = {
         x: 0,
         y: 0,
@@ -59,6 +59,24 @@ function TextButton() {
         Refresh: function () {
             this.__state__ = -1;
         }
+    }
+    if (x != undefined) {
+        btn.x = x;
+    }
+    if (y != undefined) {
+        btn.y = y;
+    }
+    if (w != undefined) {
+        btn.w = w;
+    }
+    if (h != undefined) {
+        btn.h = h;
+    }
+    if (content != undefined) {
+        btn.content = content;
+    }
+    if (OnClick != undefined) {
+        btn.OnClick = OnClick;
     }
     return btn;
 }
@@ -128,4 +146,67 @@ function IconButton() {
         }
     }
     return btn;
+}
+function QWERTYKeyboard() {
+    var kbd_obj = {
+        input_key_buttons: [],
+        __content__input__: "",
+        Draw: function () {
+            var len = this.input_key_buttons.length;
+            for (var i = 0; i < len; i++) {
+                this.input_key_buttons[i].Draw();
+            }
+            if (this.__content__input__ == "") {
+                return null;
+            }
+            var r = this.__content__input__;
+            this.__content__input__ = "";
+            return r;
+        },
+        OnClose: function () {
+
+        }
+    };
+    var bw = UI.ScreenW / 10 - 5;
+    var bh = bw * 1.25;
+    var first_line_y = UI.ScreenH - bh * 4 + 5 * 4;
+    var first_line_x = (UI.ScreenW - bw * 10 - 5 * 9) / 2;
+    var btn_id = 0;
+    var x = first_line_x;
+    var y = first_line_y;
+    {
+        {
+            var btn = TextButton(x, y, bw, bh, "q", function () {
+                kbd_obj.__content__input__ = this.content;
+            });
+            x += bw + 5;
+            kbd_obj.input_key_buttons[btn_id] = btn;
+            btn_id++;
+        }
+        {
+            var btn = TextButton(x, y, bw, bh, "w", function () {
+                kbd_obj.__content__input__ = this.content;
+            });
+            x += bw + 5;
+            kbd_obj.input_key_buttons[btn_id] = btn;
+            btn_id++;
+        }
+        {
+            var btn = TextButton(x, y, bw, bh, "e", function () {
+                kbd_obj.__content__input__ = this.content;
+            });
+            x += bw + 5;
+            kbd_obj.input_key_buttons[btn_id] = btn;
+            btn_id++;
+        }
+        {
+            var btn = TextButton(x, y, bw, bh, "r", function () {
+                kbd_obj.__content__input__ = this.content;
+            });
+            x += bw + 5;
+            kbd_obj.input_key_buttons[btn_id] = btn;
+            btn_id++;
+        }
+    }
+    return kbd_obj;
 }

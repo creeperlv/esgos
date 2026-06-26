@@ -20,8 +20,10 @@ function refresh_buttons() {
     msc_back_btn.Refresh();
     close_btn.Refresh();
 }
+var kbd;
 function init() {
     UIInit();
+    // kbd = QWERTYKeyboard();
     {
         normal_back_btn = TextButton();
         normal_back_btn.x = 0;
@@ -107,29 +109,35 @@ function init() {
         }
         y += bh + 5;
         {
-            var btn = TextButton();
-            btn.x = x;
-            btn.y = y;
-            btn.w = bw;
-            btn.h = bh;
-            btn.content = "Apply Firmware Update";
+            // var btn = TextButton();
+            // btn.x = x;
+            // btn.y = y;
+            // btn.w = bw;
+            // btn.h = bh;
+            // btn.content = "Apply Firmware Update";
+            var btn = TextButton(x, y, bw, bh, "Apply Firmware Update", function () {
+            });
             settings_home_buttons[i] = btn;
             i++;
         }
         y += bh + 5;
         {
-            var btn = TextButton();
-            btn.x = x;
-            btn.y = y;
-            btn.w = bw;
-            btn.h = bh;
-            btn.content = "About";
-            settings_home_buttons[i] = btn;
-            btn.OnClick = function () {
+            var btn = TextButton(x, y, bw, bh, "About", function () {
                 refresh_buttons();
                 UI.ClearScreen();
                 page_index = page_about;
-            };
+            });
+            // btn.x = x;
+            // btn.y = y;
+            // btn.w = bw;
+            // btn.h = bh;
+            // btn.content = "About";
+            settings_home_buttons[i] = btn;
+            // btn.OnClick = function () {
+            //     refresh_buttons();
+            //     UI.ClearScreen();
+            //     page_index = page_about;
+            // };
             i++;
         }
     }
@@ -186,4 +194,5 @@ function loop() {
             }
             break;
     }
+    // kbd.Draw();
 }

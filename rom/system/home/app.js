@@ -56,6 +56,9 @@ function init() {
         FM_button.IconH = 42;
         FM_button.IconWhite = "/ui/file-open-white.png";
         FM_button.IconBlack = "/ui/file-open.png";
+        FM_button.OnClick = function () {
+            System.LaunchSysApp("/system/explorer/");
+        };
     }
     x = base_x;
     y += bh + 10;
