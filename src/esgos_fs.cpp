@@ -90,6 +90,12 @@ void esgos_fs_close(void *handle)
     delete filePtr;
 }
 
+int esgos_fs_read_char(void *handle)
+{
+    fs::File *filePtr = static_cast<fs::File *>(handle);
+    return filePtr->read();
+}
+
 size_t esgos_fs_get_pos(void *file_handle)
 {
     return static_cast<fs::File *>(file_handle)->position();

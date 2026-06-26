@@ -38,7 +38,13 @@ static duk_function_list_entry touch_funcs[] = {
 
 static duk_function_list_entry fs_funcs[] = {
     {"Exists", esgos_dt_fs_exists, 1},
+    {"IsDirectory", esgos_dt_fs_is_directory, 1},
+    {"OpenNextFile", esgos_dt_fs_open_next_file, 1},
+    {"GetName", esgos_dt_fs_get_name, 1},
+    {"GetPath", esgos_dt_fs_get_path, 1},
     {"Open", esgos_dt_fs_open, 2},
+    {"ReadChar", esgos_dt_fs_read_char, 1},
+    {"ReadLine", esgos_dt_fs_read_line, 1},
     {"Close", esgos_dt_fs_close, 1},
     {NULL, NULL, 0}};
 
@@ -187,7 +193,7 @@ duk_ret_t esgos_dt_ui_set_text_cursor(duk_context *ctx)
 
 duk_ret_t esgos_dt_ui_set_text_font(duk_context *ctx)
 {
-    void* font_ptr=duk_get_pointer(ctx, 0);
+    void *font_ptr = duk_get_pointer(ctx, 0);
     esgos_ui_set_font(font_ptr);
     return 0;
 }
@@ -207,6 +213,34 @@ duk_ret_t esgos_dt_fs_exists(duk_context *ctx)
     return 1;
 }
 
+duk_ret_t esgos_dt_fs_is_directory(duk_context *ctx)
+{
+    duk_push_boolean(ctx, esgos_fs_is_directory(duk_get_string(ctx, 0)));
+    return 1;
+}
+
+duk_ret_t esgos_dt_fs_open_next_file(duk_context *ctx)
+{
+    void *ptr = esgos_fs_open_next_file(duk_get_pointer(ctx, 0));
+    if (ptr)
+        duk_push_pointer(ctx, ptr);
+    else
+        duk_push_null(ctx);
+    return 1;
+}
+
+duk_ret_t esgos_dt_fs_get_name(duk_context *ctx)
+{
+    duk_push_string(ctx, static_cast<fs::File *>(duk_get_pointer(ctx, 0))->name());
+    return 1;
+}
+
+duk_ret_t esgos_dt_fs_get_path(duk_context *ctx)
+{
+    duk_push_string(ctx, static_cast<fs::File *>(duk_get_pointer(ctx, 0))->path());
+    return 1;
+}
+
 duk_ret_t esgos_dt_fs_close(duk_context *ctx)
 {
     void *fp = duk_get_pointer(ctx, 0);
@@ -214,6 +248,35 @@ duk_ret_t esgos_dt_fs_close(duk_context *ctx)
     return 0;
 }
 
+duk_ret_t esgos_dt_fs_read_line(duk_context *ctx)
+{
+    char *line = esgos_fs_read_line(duk_get_pointer(ctx, 0));
+    if (line == nullptr)
+    {
+        duk_push_null(ctx);
+        return 1;
+    }
+    else
+    {
+        duk_push_string(ctx, line);
+        free(line);
+    }
+    return 1;
+}
+
+duk_ret_t esgos_dt_fs_read_char(duk_context *ctx)
+{
+    int _char = esgos_fs_read_char(duk_get_pointer(ctx, 0));
+    if (_char == EOF)
+    {
+        duk_push_null(ctx);
+    }
+    else
+    {
+        duk_push_sprintf(ctx, "%c", _char);
+    }
+    return 1;
+}
 duk_ret_t esgos_dt_ui_draw_image_png_file(duk_context *ctx)
 {
 

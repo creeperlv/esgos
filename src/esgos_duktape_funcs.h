@@ -46,12 +46,14 @@ duk_ret_t esgos_dt_touch_position_y(duk_context *ctx);
 duk_ret_t esgos_dt_fs_open(duk_context *ctx);
 duk_ret_t esgos_dt_fs_exists(duk_context *ctx);
 duk_ret_t esgos_dt_fs_is_directory(duk_context *ctx);
-duk_ret_t esgos_dt_fs_open_next_dir(duk_context *ctx);
+duk_ret_t esgos_dt_fs_open_next_file(duk_context *ctx);
+duk_ret_t esgos_dt_fs_get_name(duk_context *ctx);
+duk_ret_t esgos_dt_fs_get_path(duk_context *ctx);
 duk_ret_t esgos_dt_fs_close(duk_context *ctx);
 duk_ret_t esgos_dt_fs_read_all_string(duk_context *ctx);
 duk_ret_t esgos_dt_fs_seek(duk_context *ctx);
 duk_ret_t esgos_dt_fs_position(duk_context *ctx);
-duk_ret_t esgos_dt_fs_read(duk_context *ctx);
+duk_ret_t esgos_dt_fs_read_line(duk_context *ctx);
 duk_ret_t esgos_dt_fs_read_char(duk_context *ctx);
 
 duk_ret_t esgos_dt_core_load_library(duk_context *ctx);

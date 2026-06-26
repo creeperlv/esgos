@@ -1,4 +1,5 @@
 #include "esgos_engine.h"
+#include "esgos_duktape_funcs.h"
 
 static duk_ret_t gfx_print(duk_context *ctx)
 {
