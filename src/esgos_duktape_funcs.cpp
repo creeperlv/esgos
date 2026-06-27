@@ -258,6 +258,14 @@ duk_ret_t esgos_dt_fs_close(duk_context *ctx)
     return 0;
 }
 
+duk_ret_t esgos_dt_fs_seek(duk_context *ctx)
+{
+    void *fp = duk_get_pointer(ctx, 0);
+    size_t pos = (size_t)duk_get_number(ctx, 1);
+    duk_push_boolean(ctx, esgos_fs_seek(fp, pos));
+    return 1;
+}
+
 duk_ret_t esgos_dt_fs_rewind(duk_context *ctx)
 {
     void *fp = duk_get_pointer(ctx, 0);
