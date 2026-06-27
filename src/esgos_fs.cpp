@@ -17,7 +17,7 @@ bool esgos_fs_init()
     return true;
 }
 
-void *esgos_fs_open(const char *fp,const char *mode)
+void *esgos_fs_open(const char *fp, const char *mode)
 {
     fs::File file = SD.open(fp, mode);
     if (!file)
@@ -39,6 +39,11 @@ size_t esgos_fs_seek(void *file_handle, size_t pos)
     return static_cast<fs::File *>(file_handle)->seek(pos);
 }
 
+bool esgos_fs_seek_dir(void *file_handle, size_t pos)
+{
+    return static_cast<fs::File *>(file_handle)->seekDir(pos);
+}
+
 bool esgos_fs_is_exists(const char *fp)
 {
     return SD.exists(fp);
@@ -58,6 +63,11 @@ bool esgos_fs_is_directory(const char *fp)
         return b;
     }
     return false;
+}
+
+bool esgos_fs_is_directory_fp(void *fp)
+{
+    return static_cast<fs::File *>(fp)->isDirectory();
 }
 
 bool esgos_fs_remove(const char *fp)
@@ -99,6 +109,16 @@ int esgos_fs_read_char(void *handle)
 size_t esgos_fs_get_pos(void *file_handle)
 {
     return static_cast<fs::File *>(file_handle)->position();
+}
+
+size_t esgos_fs_get_size(void *file_handle)
+{
+    return static_cast<fs::File *>(file_handle)->size();
+}
+
+void esgos_fs_rewind_dir(void *file_handle)
+{
+    static_cast<fs::File *>(file_handle)->rewindDirectory();
 }
 
 char *esgos_fs_read_all_cstr(void *file_handle)
@@ -145,7 +165,9 @@ char *esgos_fs_read_line(void *file_handle)
                     size += 64;
                 }
             }
-        }else{
+        }
+        else
+        {
             break;
         }
     }

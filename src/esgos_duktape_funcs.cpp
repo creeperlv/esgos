@@ -46,6 +46,10 @@ static duk_function_list_entry fs_funcs[] = {
     {"ReadChar", esgos_dt_fs_read_char, 1},
     {"ReadLine", esgos_dt_fs_read_line, 1},
     {"Close", esgos_dt_fs_close, 1},
+    {"Seek", esgos_dt_fs_seek, 2},
+    {"Rewind", esgos_dt_fs_rewind, 1},
+    {"IsDirectoryFilePointer", esgos_dt_fs_is_directory_fp, 1},
+    {"SeekDir", esgos_dt_fs_seek_dir, 2},
     {NULL, NULL, 0}};
 
 duk_ret_t esgos_dt_core_log(duk_context *ctx)
@@ -219,6 +223,12 @@ duk_ret_t esgos_dt_fs_is_directory(duk_context *ctx)
     return 1;
 }
 
+duk_ret_t esgos_dt_fs_is_directory_fp(duk_context *ctx)
+{
+    duk_push_boolean(ctx, esgos_fs_is_directory_fp(duk_get_pointer(ctx, 0)));
+    return 1;
+}
+
 duk_ret_t esgos_dt_fs_open_next_file(duk_context *ctx)
 {
     void *ptr = esgos_fs_open_next_file(duk_get_pointer(ctx, 0));
@@ -246,6 +256,21 @@ duk_ret_t esgos_dt_fs_close(duk_context *ctx)
     void *fp = duk_get_pointer(ctx, 0);
     esgos_fs_close(fp);
     return 0;
+}
+
+duk_ret_t esgos_dt_fs_rewind(duk_context *ctx)
+{
+    void *fp = duk_get_pointer(ctx, 0);
+    esgos_fs_rewind_dir(fp);
+    return 0;
+}
+
+duk_ret_t esgos_dt_fs_seek_dir(duk_context *ctx)
+{
+    void *fp = duk_get_pointer(ctx, 0);
+    size_t pos = (size_t)duk_get_number(ctx, 1);
+    duk_push_boolean(ctx, esgos_fs_seek_dir(fp, pos));
+    return 1;
 }
 
 duk_ret_t esgos_dt_fs_read_line(duk_context *ctx)

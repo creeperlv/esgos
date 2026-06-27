@@ -16,10 +16,25 @@ function OpenFile(filename, mode) {
         },
         ReadLine: function () {
             return FS.ReadLine(this.handle);
-        
+
         },
         OpenNextFile: function () {
             return FS.OpenNextFile(this.handle);
+        },
+        IsDir: function () {
+            return FS.IsDirectoryFilePointer(this.handle);
+        }
+        ,
+        Rewind: function () {
+            FS.Rewind(this.handle);
+        }
+        ,
+        SeekDir: function (pos) {
+            return FS.SeekDir(this.handle, pos);
+        }
+        ,
+        Seek: function (pos) {
+            return FS.Seek(this.handle, pos);
         }
     };
 
