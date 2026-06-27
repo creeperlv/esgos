@@ -1,0 +1,6 @@
+{
+    "Name": "Example App",
+    "Icon": "Icon.png",
+    "HasIcon": false,
+    "UseBinary": false
+}

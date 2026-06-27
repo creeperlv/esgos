@@ -37,5 +37,5 @@ function OpenFile(filename, mode) {
             return FS.Seek(this.handle, pos);
         }
     };
-
+    return fileObject;
 }

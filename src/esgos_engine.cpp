@@ -32,11 +32,13 @@ static duk_ret_t duk_esgos_open_app(duk_context *ctx)
 }
 static void fatal_handler(void *udata, const char *msg)
 {
-    show_logln("FALAL ERROR");
+    esgos_ui_set_cursor(0, 0);
+    show_errln("****Engine Fatal Error****");
+    show_errln("FALAL ERROR");
     if (msg)
-        show_logln(msg);
+        show_errln(msg);
     else
-        show_logln("no message");
+        show_errln("no message");
     while (1)
         delay(1000);
 }

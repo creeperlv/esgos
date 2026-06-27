@@ -47,7 +47,7 @@ void show_logln(const char *str)
     if (is_show_boot_log)
         esgos_ui_printf("[%f]%s\n", millis() / 1000.0, str);
 }
-static void show_errln(const char *str)
+void show_errln(const char *str)
 {
     esgos_ui_printf("[%f][Error]%s\n", millis() / 1000.0, str);
 }
