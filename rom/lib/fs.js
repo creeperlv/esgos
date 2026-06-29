@@ -1,6 +1,6 @@
-function OpenFile(filename, mode) {
+function OpenFile_Handle(fs_handle) {
     var fileObject = {
-        handle: FS.Open(filename, mode),
+        handle: fs_handle,
         Close: function () {
             FS.Close(this.handle);
         },
@@ -19,7 +19,10 @@ function OpenFile(filename, mode) {
 
         },
         OpenNextFile: function () {
-            return FS.OpenNextFile(this.handle);
+            var next_handle = FS.OpenNextFile(this.handle);
+            if (next_handle == null)
+                return null;
+            return OpenFile_Handle(next_handle);
         },
         IsDir: function () {
             return FS.IsDirectoryFilePointer(this.handle);
@@ -38,4 +41,7 @@ function OpenFile(filename, mode) {
         }
     };
     return fileObject;
+}
+function OpenFile(filename, mode) {
+    return OpenFile_Handle(FS.Open(filename, mode));
 }

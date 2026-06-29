@@ -80,7 +80,7 @@ function TextButton(x, y, w, h, content, OnClick) {
     }
     return btn;
 }
-function IconButton() {
+function IconButton(x, y, w, h, icon_black, icon_white, OnClick) {
     var btn = {
         x: 0,
         y: 0,
@@ -88,12 +88,21 @@ function IconButton() {
         h: 0,
         IconW: 16,
         IconH: 16,
+        IsShown: true,
         IconScale: 1,
         __state__: -1,
         __state__last: -1,
         IconWhite: "/ui/default_icon_16_w.png",
         IconBlack: "/ui/default_icon_16_b.png",
         Draw: function () {
+            if (!this.IsShown) {
+                this.__state__ = -2;
+                if (this.__state__ != this.__state__last) {
+                    UI.FillRect(this.x, this.y, this.w, this.h, UI.White);
+                    this.__state__last = this.__state__;
+                }
+                return;
+            }
             var draw = false;
             var is_ptr_inside = __isHitAABB(this.x, this.y, this.w, this.h, Touch.PosX(), Touch.PosY());
 
@@ -144,6 +153,27 @@ function IconButton() {
         Refresh: function () {
             this.__state__ = -1;
         }
+    }
+    if (x != undefined) {
+        btn.x = x;
+    }
+    if (y != undefined) {
+        btn.y = y;
+    }
+    if (w != undefined) {
+        btn.w = w;
+    }
+    if (h != undefined) {
+        btn.h = h;
+    }
+    if (icon_white != undefined) {
+        btn.IconWhite = icon_white;
+    }
+    if (icon_black != undefined) {
+        btn.IconBlack = icon_black;
+    }
+    if (OnClick != undefined) {
+        btn.OnClick = OnClick;
     }
     return btn;
 }
@@ -283,7 +313,9 @@ function IconTextButton(x, y, w, h, content, icon_black, icon_white, OnClick) {
             }
             return this.__state__;
         },
-        OnClick: function () { },
+        Refresh: function () {
+            this.__state__ = -1;
+        },
     };
 
     if (x != undefined) {

@@ -240,6 +240,7 @@ void setup()
     M5.Display.setRotation(0);
     M5.Display.setTextColor(TFT_BLACK);
     M5.Display.setTextScroll(true);
+    M5.Display.setEpdMode(epd_mode_t::epd_fast);
     esgos_ui_set_cursor(0, 0);
     esgos_ui_set_font16();
     init_fs();

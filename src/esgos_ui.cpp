@@ -126,9 +126,19 @@ void *esgos_ui_get_font24()
     return (void *)&fonts::efontCN_24;
 }
 
+void *esgos_ui_get_font36()
+{
+    return (void *)&fonts::lgfxJapanGothic_36;
+}
+
 void *esgos_ui_get_font40()
 {
     return (void *)&fonts::DejaVu40;
+}
+
+void *esgos_ui_get_font72()
+{
+    return (void *)&fonts::DejaVu72;
 }
 
 void esgos_ui_set_font(void *font)
@@ -151,7 +161,17 @@ void esgos_ui_set_font24()
     M5.Display.setFont(static_cast<lgfx::IFont *>(esgos_ui_get_font24()));
 }
 
+void esgos_ui_set_font36()
+{
+    M5.Display.setFont(static_cast<lgfx::IFont *>(esgos_ui_get_font36()));
+}
+
 void esgos_ui_set_font40()
 {
     M5.Display.setFont(static_cast<lgfx::IFont *>(esgos_ui_get_font40()));
+}
+
+void esgos_ui_set_font72()
+{
+    M5.Display.setFont(static_cast<lgfx::IFont *>(esgos_ui_get_font72()));
 }

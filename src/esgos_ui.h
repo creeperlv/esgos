@@ -46,12 +46,16 @@ void esgos_ui_draw_png_file_center(const char *str, int x, int y, int w, int h, 
 void *esgos_ui_get_font16();
 void *esgos_ui_get_font18();
 void *esgos_ui_get_font24();
+void *esgos_ui_get_font36();
 void *esgos_ui_get_font40();
+void *esgos_ui_get_font72();
 void esgos_ui_set_font(void *font);
 void esgos_ui_set_font16();
 void esgos_ui_set_font18();
 void esgos_ui_set_font24();
+void esgos_ui_set_font36();
 void esgos_ui_set_font40();
+void esgos_ui_set_font72();
 void *esgos_ui_get_color_white();
 void *esgos_ui_get_color_black();
 #endif

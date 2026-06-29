@@ -32,7 +32,14 @@ static duk_ret_t duk_esgos_open_app(duk_context *ctx)
 }
 static void fatal_handler(void *udata, const char *msg)
 {
+    esgos_ui_clear_screen();
+    esgos_ui_set_font72();
     esgos_ui_set_cursor(0, 0);
+    esgos_ui_print("\n  :(\n\n");
+    esgos_ui_set_font24();
+    esgos_ui_print("Your device ran into a problem and needs to restart\n");
+    esgos_ui_print("Please manually restart via the hardware reset button.\n");
+    esgos_ui_set_font16();
     show_errln("****Engine Fatal Error****");
     show_errln("FALAL ERROR");
     if (msg)
