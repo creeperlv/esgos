@@ -19,13 +19,18 @@ bool esgos_fs_init()
 
 void *esgos_fs_open(const char *fp, const char *mode)
 {
-    fs::File file = SD.open(fp, mode);
-    if (!file)
+    fs::File *filePtr = new (std::nothrow) fs::File(SD.open(fp, mode));
+
+    if (!filePtr)
     {
         return nullptr;
     }
-    fs::File *filePtr = new fs::File(file);
 
+    if (!(*filePtr))
+    {
+        delete filePtr;
+        return nullptr;
+    }
     return static_cast<void *>(filePtr);
 }
 
@@ -78,25 +83,41 @@ bool esgos_fs_remove(const char *fp)
 
 void *esgos_fs_open_next_file(void *handle)
 {
-
-    fs::File *_file = static_cast<fs::File *>(handle);
-
-    fs::File file = _file->openNextFile();
-    ;
-    if (!file)
+    if (!handle)
     {
         return nullptr;
     }
-    fs::File *filePtr = new fs::File(file);
+    fs::File *_file = static_cast<fs::File *>(handle);
+    if (!_file->isDirectory())
+    {
+        return nullptr;
+    }
+    fs::File *nextFile = new (std::nothrow) fs::File(_file->openNextFile());
 
-    return static_cast<void *>(filePtr);
+    // Check if heap allocation itself failed (out of RAM)
+    if (!nextFile)
+    {
+        return nullptr;
+    }
+
+    // Check if the file it actually opened is valid (e.g. End of Directory)
+    if (!(*nextFile))
+    {
+        delete nextFile;
+        return nullptr;
+    }
+
+    return static_cast<void *>(nextFile);
 }
 void esgos_fs_close(void *handle)
 {
     if (!handle)
         return;
     fs::File *filePtr = static_cast<fs::File *>(handle);
-    filePtr->close();
+    if (*filePtr)
+    {
+        filePtr->close();
+    }
     delete filePtr;
 }
 
@@ -128,6 +149,16 @@ char *esgos_fs_read_all_cstr(void *file_handle)
     filePtr->read((uint8_t *)buf, filePtr->size());
     buf[filePtr->size()] = 0;
     return buf;
+}
+
+bool esgos_fs_read_all_data(void *file_handle, uint8_t **recv, size_t *length)
+{
+    fs::File *filePtr = static_cast<fs::File *>(file_handle);
+    uint8_t *buf = (uint8_t *)malloc(filePtr->size());
+    filePtr->read((uint8_t *)buf, filePtr->size());
+    recv[0] = buf;
+    length[0] = filePtr->size();
+    return true;
 }
 
 char *esgos_fs_read_file_path_all_cstr(const char *file_name)

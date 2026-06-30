@@ -22,6 +22,7 @@ size_t esgos_fs_get_pos(void *file_handle);
 size_t esgos_fs_get_size(void *file_handle);
 void esgos_fs_rewind_dir(void *file_handle);
 char *esgos_fs_read_all_cstr(void *file_handle);
+bool esgos_fs_read_all_data(void *file_handle, uint8_t** recv, size_t* length);
 char *esgos_fs_read_file_path_all_cstr(const char *file_name);
 /**
  * @brief Must free ptr returned after use!

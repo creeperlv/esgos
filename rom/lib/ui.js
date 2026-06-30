@@ -250,8 +250,8 @@ function IconTextButton(x, y, w, h, content, icon_black, icon_white, OnClick) {
         __state__: -1,
         __state__last: -1,
         content: "",
-        IconWhite: icon_white,
-        IconBlack: icon_black,
+        IconWhite: "/ui/default_icon_16_w.png",
+        IconBlack: "/ui/default_icon_16_b.png",
         IconW: 18,
         IconH: 18,
         IconScale: 1,
@@ -259,7 +259,7 @@ function IconTextButton(x, y, w, h, content, icon_black, icon_white, OnClick) {
             if (!this.IsShown) {
                 this.__state__ = -2;
                 if (this.__state__ != this.__state__last) {
-                    UI.FillRect(this.x, this.y, this.w, this.h, UI.White);
+                    UI.FillRect(this.x, this.y, this.w + 1, this.h + 1, UI.White);
                     this.__state__last = this.__state__;
                 }
                 return;
@@ -295,8 +295,10 @@ function IconTextButton(x, y, w, h, content, icon_black, icon_white, OnClick) {
                         UI.DrawPngFile(this.IconBlack, image_x, image_y, this.IconW, this.IconH, this.IconScale, this.IconScale);
                 }
             }
-            UI.SetTextCursor(this.x + this.IconW + 10, this.y + this.h / 2 - 16 / 2)
-            Core.Write(this.content);
+            if (draw) {
+                UI.SetTextCursor(this.x + this.IconW + 10, this.y + this.h / 2 - 16 / 2)
+                Core.Write(this.content);
+            }
             {
                 if (this.__state__ != this.__state__last) {
                     if (this.__state__last == 1) {

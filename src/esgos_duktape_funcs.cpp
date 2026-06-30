@@ -241,6 +241,11 @@ duk_ret_t esgos_dt_fs_open_next_file(duk_context *ctx)
 
 duk_ret_t esgos_dt_fs_get_name(duk_context *ctx)
 {
+    if (duk_get_pointer(ctx, 0) == NULL || duk_get_pointer(ctx, 0) == nullptr)
+    {
+        duk_push_string(ctx, "<ptr is null>");
+        return 1;
+    }
     duk_push_string(ctx, static_cast<fs::File *>(duk_get_pointer(ctx, 0))->name());
     return 1;
 }

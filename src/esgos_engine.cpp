@@ -96,12 +96,38 @@ void esgos_load_script_no_result(void *engine_context, const char *script)
     duk_call((duk_context *)engine_context, 0);
     // duk_eval_string_noresult((duk_context *)engine_context, script);
 }
+static bool ends_with(const char *str, const char *suffix)
+{
+    if (!str || !suffix)
+        return false; // Handle null pointer safety
 
+    size_t str_len = strlen(str);
+    size_t suffix_len = strlen(suffix);
+
+    if (suffix_len > str_len)
+        return false;
+
+    return strcmp(str + str_len - suffix_len, suffix) == 0;
+}
 void esgos_load_script_from_file(void *engine_context, const char *file_path)
 {
-    char *script = esgos_fs_read_file_path_all_cstr(file_path);
-    esgos_load_script_no_result(engine_context, (const char *)script);
-    free(script);
+    if (ends_with(file_path, ".bin"))
+    {
+        uint8_t *data = nullptr;
+        size_t length = 0;
+        void *handle = esgos_fs_open(file_path, "rb");
+        esgos_fs_read_all_data(handle, &data, &length);
+        esgos_fs_close(handle);
+        esgos_load_bytecode(engine_context, (void *)data, length);
+        duk_call((duk_context *)engine_context, 0);
+        free(data);
+    }
+    else
+    {
+        char *script = esgos_fs_read_file_path_all_cstr(file_path);
+        esgos_load_script_no_result(engine_context, (const char *)script);
+        free(script);
+    }
 }
 
 void esgos_load_script_fn(void *engine_context, char *script, char *fn)

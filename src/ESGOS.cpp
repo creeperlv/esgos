@@ -259,7 +259,7 @@ void setup()
     app_is_sys_app = true;
     esgos_bind_to_home(to_home);
     esgos_dt_set_to_settings(to_settings);
-    xTaskCreateUniversal(esgos_new_main, "new_main", 128 * 1024, NULL, 1, NULL, ARDUINO_RUNNING_CORE);
+    xTaskCreateUniversal(esgos_new_main, "new_main", 192 * 1024, NULL, 1, NULL, ARDUINO_RUNNING_CORE);
     // to_home();
     vTaskDelete(NULL);
 }

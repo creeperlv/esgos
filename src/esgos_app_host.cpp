@@ -37,10 +37,20 @@ void *esgos_app_host_start_app(const char *app_dir)
 
     esgos_app_host_load_deps(ptr, app_dir);
     std::string full_path = std::string(app_dir) + "/app.js";
-    const char *app_path = full_path.c_str();
-    char *script = esgos_fs_read_file_path_all_cstr(app_path);
-    esgos_load_script_no_result(ptr, script);
-    free(script);
+    std::string full_path_bin = std::string(app_dir) + "/app.bin";
+    const char *app_js_path = full_path.c_str();
+    const char *app_bin_path = full_path_bin.c_str();
+    if (esgos_fs_is_exists(app_bin_path))
+    {
+        esgos_load_script_from_file(ptr, app_bin_path);
+    }
+    else
+    {
+
+        char *script = esgos_fs_read_file_path_all_cstr(app_js_path);
+        esgos_load_script_no_result(ptr, script);
+        free(script);
+    }
     return ptr;
 }
 
@@ -51,12 +61,22 @@ void *esgos_app_host_start_system_app(const char *app_dir)
     // esgos_engine_setup_system_app_api(ptr);
     esgos_dt_bind_all((duk_context *)ptr);
     esgos_dt_bind_system((duk_context *)ptr);
-    std::string full_path = std::string(app_dir) + "/app.js";
-    const char *app_path = full_path.c_str();
-    char *script = esgos_fs_read_file_path_all_cstr(app_path);
-    esgos_load_script_no_result(ptr, script);
-    free(script);
     esgos_app_host_load_deps(ptr, app_dir);
+    std::string full_path = std::string(app_dir) + "/app.js";
+    std::string full_path_bin = std::string(app_dir) + "/app.bin";
+    const char *app_js_path = full_path.c_str();
+    const char *app_bin_path = full_path_bin.c_str();
+    if (esgos_fs_is_exists(app_bin_path))
+    {
+        esgos_load_script_from_file(ptr, app_bin_path);
+    }
+    else
+    {
+
+        char *script = esgos_fs_read_file_path_all_cstr(app_js_path);
+        esgos_load_script_no_result(ptr, script);
+        free(script);
+    }
     return ptr;
 }
 
