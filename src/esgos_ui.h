@@ -56,6 +56,7 @@ void esgos_ui_set_font24();
 void esgos_ui_set_font36();
 void esgos_ui_set_font40();
 void esgos_ui_set_font72();
+void esgos_ui_set_epd_mode(int mode);
 void *esgos_ui_get_color_white();
 void *esgos_ui_get_color_black();
 #endif

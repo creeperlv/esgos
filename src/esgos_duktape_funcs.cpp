@@ -17,6 +17,7 @@ static duk_function_list_entry ui_funcs[] = {
     {"SetTextColor", esgos_dt_ui_set_text_color, 1},
     {"SetTextCursor", esgos_dt_ui_set_text_cursor, 2},
     {"SetTextFont", esgos_dt_ui_set_text_font, 1},
+    {"SetEPDMode", esgos_dt_ui_set_epd_mode, 1},
     {"DrawPngFile", esgos_dt_ui_draw_image_png_file, 7},
     {NULL, NULL, 0}};
 
@@ -178,6 +179,13 @@ duk_ret_t esgos_dt_ui_fill_rect(duk_context *ctx)
 duk_ret_t esgos_dt_ui_full_screen_clear(duk_context *ctx)
 {
     esgos_ui_clear_screen();
+    return 0;
+}
+
+duk_ret_t esgos_dt_ui_set_epd_mode(duk_context *ctx)
+{
+    int mode = (int)duk_get_number(ctx, 0);
+    esgos_ui_set_epd_mode(mode);
     return 0;
 }
 

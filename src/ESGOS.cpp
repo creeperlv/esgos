@@ -31,6 +31,7 @@ void *settings_app;
 static bool is_show_boot_log;
 static const char *app_to_launch = nullptr;
 static bool app_is_sys_app = false;
+static bool bat_ischarging = false;
 m5::touch_detail_t touchDetail;
 static void show_log(const char *str)
 {
@@ -123,8 +124,21 @@ void esgos_core_schedule_launch_app(const char *app, bool is_system_app)
 }
 int32_t bat = -1;
 int32_t _bat = -1;
+int32_t status_bar_refresh_frame = 0;
 bool esgos_check_status_bar()
 {
+    if (status_bar_refresh_frame < 50)
+    {
+        status_bar_refresh_frame++;
+        return false;
+    }
+    bool bat_charging = (M5.Power.isCharging() == M5.Power.is_charging);
+    if (bat_ischarging != bat_charging)
+    {
+        bat_ischarging = bat_charging;
+        return true;
+    }
+    status_bar_refresh_frame = 0;
     bat = M5.Power.getBatteryLevel();
     if (info.is_app_switched)
     {
@@ -148,7 +162,22 @@ void esgos_draw_status_bar()
     int BatIconW = 30;
     esgos_ui_fill_rectangle(0, 0, esgos_ui_get_screen_w(), info.status_bar_height, esgos_ui_get_color_white());
     M5.Display.setCursor(esgos_ui_get_screen_w() - 50 - BatIconW, 2);
-    M5.Display.printf("%d %%", bat);
+    M5.Display.printf("%d%%", bat);
+    if (bat_ischarging)
+    {
+
+        if (esgos_fs_is_exists("/ui/power-plug.png"))
+        {
+            esgos_ui_draw_png_file("/ui/power-plug.png", esgos_ui_get_screen_w() - 80 - BatIconW, 1, 18, 18, 1, 1);
+        }
+        else
+        {
+            M5.Display.setCursor(esgos_ui_get_screen_w() - 75 - BatIconW, 4);
+            M5.Display.printf("C");
+            M5.Display.setCursor(esgos_ui_get_screen_w() - 80 - BatIconW, 2);
+            M5.Display.printf("[]");
+        }
+    }
     {
 
         float v = bat / 100.0f;

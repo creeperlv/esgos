@@ -175,3 +175,8 @@ void esgos_ui_set_font72()
 {
     M5.Display.setFont(static_cast<lgfx::IFont *>(esgos_ui_get_font72()));
 }
+
+void esgos_ui_set_epd_mode(int mode)
+{
+    M5.Display.setEpdMode((epd_mode_t)mode);
+}

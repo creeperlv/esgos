@@ -84,6 +84,7 @@ function load_content() {
 }
 function init() {
     UIInit();
+    UI.SetEPDMode(UI.EPDFastest);
     selected_path = null;
     show_menu = false;
     page_count_width = 200;

@@ -7,6 +7,7 @@ var restart_button;
 var test_button;
 function init() {
     UIInit();
+    UI.SetEPDMode(UI.EPDText);
     {
         test_button = IconButton();
         test_button.x = 32;
@@ -103,6 +104,7 @@ function init() {
         poweroff_button.IconWhite = "/ui/poweroff-white.png";
         poweroff_button.IconBlack = "/ui/poweroff.png";
         poweroff_button.OnClick = function () {
+            UI.SetEPDMode(UI.EPDQuality);
             drawBG();
             UI.SetTextColor(UI.Black);
             UI.DrawCenterStringFont('Goodbye!', UI.GetScreenW() / 2, UI.GetScreenH() / 2, UI.GetFont40());

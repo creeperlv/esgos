@@ -20,6 +20,8 @@ duk_ret_t esgos_dt_ui_draw_center_string_font(duk_context *ctx);
 duk_ret_t esgos_dt_ui_fill_rect(duk_context *ctx);
 duk_ret_t esgos_dt_ui_full_screen_clear(duk_context *ctx);
 
+duk_ret_t esgos_dt_ui_set_epd_mode(duk_context *ctx);
+
 duk_ret_t esgos_dt_ui_set_text_color(duk_context *ctx);
 duk_ret_t esgos_dt_ui_set_text_cursor(duk_context *ctx);
 duk_ret_t esgos_dt_ui_set_text_scroll(duk_context *ctx);

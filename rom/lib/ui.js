@@ -4,6 +4,10 @@ function UIInit() {
     UI.ScreenH = UI.GetScreenH();
     UI.ScreenW = UI.GetScreenW();
     UI.StatusBarHeight = UI.GetStatusBarHeight();
+    UI.EPDFastest=4;
+    UI.EPDFast=3;
+    UI.EPDText=2;
+    UI.EPDQuality=1;
 }
 function __isHitAABB(x, y, w, h, px, py) {
     return px > x && px < (x + w) && py > y && py < (y + h);
