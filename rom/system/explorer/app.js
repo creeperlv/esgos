@@ -15,7 +15,10 @@ var file_icon_white;
 var last_selection_y;
 var selected_path;
 var bh;
-
+var bottom_button_y;
+var has_next = false;
+var file_item_max = 0;
+var page_button_bw = 0;
 function unselect_all() {
     if (last_selection_y > 0) {
         UI.FillRect(5, last_selection_y, 50, bh, UI.White);
@@ -30,10 +33,9 @@ function load_content() {
     UI.FillRect(0, 20, UI.GetScreenW(), 40, UI.White);
     UI.DrawCenterStringFont(open_folder_list[idx], UI.GetScreenW() / 2, 36, UI.GetFont24());
     current_dir.SeekDir(folder_list_current_index);
-    var max = file_items.length;
     var reach_end = false;
     var i = 0;
-    for (; i < max; i++) {
+    for (; i < file_item_max; i++) {
         var item = current_dir.OpenNextFile();
         if (item == null) {
             reach_end = true;
@@ -58,19 +60,38 @@ function load_content() {
         }
     }
     // }
+    var disp = "" + folder_list_current_index;
+    if (folder_list_current_index > 0) {
+        disp = "< " + disp;
+    } else
+        disp = "[ " + disp;
+    if (reach_end) {
+        has_next = false;
+        disp = disp + " ]";
+    } else {
+        var item = current_dir.OpenNextFile();
+        if (item == null) {
+            has_next = false;
+        } else {
+            has_next = true;
+        }
+        item.Close();
+        disp = disp + " >";
+    }
+    UI.FillRect(5 + page_button_bw, bottom_button_y, (UI.GetScreenW() - page_count_width) / 2, bh, UI.White);
+    UI.DrawCenterStringFont(disp, UI.GetScreenW() / 2, bottom_button_y + 12, UI.GetFont24());
     current_dir.Close();
 }
 function init() {
     UIInit();
     selected_path = null;
     show_menu = false;
-    page_count_width = 150;
+    page_count_width = 200;
     folder_list_current_index = 0;
     last_selection_y = -1;
     var base_x = 15;
     bh = 60;
-    var bottom_button_y = UI.ScreenH - (bh + 10) * 2;
-    var y = 60;
+    var y = 65;
     var bw = (UI.ScreenW - 60);
     var x = 55;
     var padding = 5;
@@ -93,16 +114,32 @@ function init() {
         file_items[i] = btn;
         y += bh;
     }
+    file_item_max = file_items.length;
     {
         close_btn = TextButton(0, 20, 40, 40, "<", function () {
             System.LaunchSysApp("/system/home/");
         });
     }
-    y = UI.ScreenH - (bh + padding) * 2;
-    var page_button_bw = (UI.ScreenW - page_count_width - 10) / 2;
+    y = UI.ScreenH - (bh + padding) * 2 - padding;
+    bottom_button_y = y;
+    page_button_bw = (UI.ScreenW - page_count_width - 10) / 2;
     var MenuButton_bw = (UI.ScreenW - 5 * 3) / 2;
-    last_page_btn = TextButton(5, y + 5, page_button_bw, bh, "<");
-    next_page_btn = TextButton(5 + page_button_bw + page_count_width, y + 5, page_button_bw, bh, ">");
+    last_page_btn = TextButton(5, y + 5, page_button_bw, bh, "<", function () {
+        if (folder_list_current_index > 0) {
+            unselect_all();
+            selected_path = null;
+            folder_list_current_index -= file_item_max;
+            load_content();
+        }
+    });
+    next_page_btn = TextButton(5 + page_button_bw + page_count_width, y + 5, page_button_bw, bh, ">", function () {
+        if (has_next) {
+            folder_list_current_index += file_item_max;
+            unselect_all();
+            selected_path = null;
+            load_content();
+        }
+    });
     y += bh + 5;
     goback_btn = TextButton(5, y + 5, MenuButton_bw, bh, "Go Back", function () {
         if (open_folder_list.length > 1) {

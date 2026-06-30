@@ -43,6 +43,7 @@ static duk_function_list_entry fs_funcs[] = {
     {"GetName", esgos_dt_fs_get_name, 1},
     {"GetPath", esgos_dt_fs_get_path, 1},
     {"Open", esgos_dt_fs_open, 2},
+    {"GetSize", esgos_dt_fs_get_size, 2},
     {"ReadChar", esgos_dt_fs_read_char, 1},
     {"ReadLine", esgos_dt_fs_read_line, 1},
     {"Close", esgos_dt_fs_close, 1},
@@ -253,6 +254,12 @@ duk_ret_t esgos_dt_fs_get_name(duk_context *ctx)
 duk_ret_t esgos_dt_fs_get_path(duk_context *ctx)
 {
     duk_push_string(ctx, static_cast<fs::File *>(duk_get_pointer(ctx, 0))->path());
+    return 1;
+}
+
+duk_ret_t esgos_dt_fs_get_size(duk_context *ctx)
+{
+    duk_push_number(ctx, (double)static_cast<fs::File *>(duk_get_pointer(ctx, 0))->size());
     return 1;
 }
 

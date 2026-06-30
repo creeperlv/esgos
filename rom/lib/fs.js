@@ -39,6 +39,10 @@ function OpenFile_Handle(fs_handle) {
         Seek: function (pos) {
             return FS.Seek(this.handle, pos);
         }
+        ,
+        GetSize: function () {
+            return FS.GetSize(this.handle);
+        }
     };
     return fileObject;
 }

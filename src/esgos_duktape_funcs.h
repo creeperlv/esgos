@@ -50,6 +50,7 @@ duk_ret_t esgos_dt_fs_is_directory_fp(duk_context *ctx);
 duk_ret_t esgos_dt_fs_open_next_file(duk_context *ctx);
 duk_ret_t esgos_dt_fs_get_name(duk_context *ctx);
 duk_ret_t esgos_dt_fs_get_path(duk_context *ctx);
+duk_ret_t esgos_dt_fs_get_size(duk_context *ctx);
 duk_ret_t esgos_dt_fs_close(duk_context *ctx);
 duk_ret_t esgos_dt_fs_read_all_string(duk_context *ctx);
 duk_ret_t esgos_dt_fs_seek(duk_context *ctx);
